@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dhanush M · Data Analyst</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ── TOKENS ─────────────────────────────────── */
+:root{
+  --ink:#0b0c10;
+  --ink2:#14151b;
+  --surface:#1a1b23;
+  --border:#2a2b36;
+  --accent:#f0c040;
+  --accent2:#e05c3a;
+  --text:#ecedf5;
+  --muted:#7e8098;
+  --faint:#2e2f3d;
+  --glow:rgba(240,192,64,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{background:var(--ink);color:var(--text);font-family:'Outfit',sans-serif;overflow-x:hidden;line-height:1.6;}
+::selection{background:var(--accent);color:var(--ink);}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--ink);}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px;}
+
+/* ── CURSOR ─────────────────────────────────── */
+body{cursor:none;}
+#cur{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .15s;}
+#cur-ring{position:fixed;width:30px;height:30px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .18s ease;opacity:.35;}
+body:not(.desktop) #cur,body:not(.desktop) #cur-ring{display:none;}
+
+/* ── NAV ─────────────────────────────────────── */
+nav{position:fixed;top:0;inset-inline:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.9rem 4rem;background:rgba(11,12,16,.82);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.35rem;color:var(--accent);letter-spacing:-.02em;}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--accent);}
+.nav-hire{background:var(--accent)!important;color:var(--ink)!important;padding:.45rem 1.2rem;border-radius:4px;font-weight:700!important;letter-spacing:.04em;transition:opacity .2s,transform .2s!important;}
+.nav-hire:hover{opacity:.85;transform:translateY(-1px)!important;}
+
+/* ── HERO ─────────────────────────────────────── */
+#hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:4rem;padding:9rem 4rem 5rem;position:relative;overflow:hidden;}
+.hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.35;pointer-events:none;}
+.hero-bg-glow{position:absolute;top:-20%;right:-10%;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(240,192,64,.08),transparent 65%);pointer-events:none;animation:breathe 9s ease-in-out infinite;}
+.hero-bg-glow2{position:absolute;bottom:-20%;left:-10%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(224,92,58,.07),transparent 65%);pointer-events:none;animation:breathe 12s ease-in-out infinite reverse;}
+@keyframes breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+
+.hero-left{position:relative;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(240,192,64,.1);border:1px solid rgba(240,192,64,.3);color:var(--accent);font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .9rem;border-radius:2px;margin-bottom:1.8rem;animation:fadeUp .6s ease both;}
+.badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+.hero-name{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(3.5rem,6vw,6.5rem);line-height:.92;letter-spacing:-.04em;margin-bottom:1.2rem;animation:fadeUp .6s .1s ease both;}
+.hero-name em{font-style:italic;font-weight:300;color:var(--accent);}
+.hero-role{font-size:.95rem;color:var(--muted);font-weight:400;letter-spacing:.04em;margin-bottom:1.4rem;animation:fadeUp .6s .2s ease both;}
+.hero-role span{color:var(--text);font-weight:600;}
+.hero-desc{font-size:.9rem;color:var(--muted);line-height:1.85;max-width:480px;margin-bottom:2.2rem;animation:fadeUp .6s .3s ease both;}
+
+.hero-actions{display:flex;gap:.9rem;flex-wrap:wrap;margin-bottom:2.2rem;animation:fadeUp .6s .4s ease both;}
+.btn-primary{display:inline-flex;align-items:center;gap:.45rem;background:var(--accent);color:var(--ink);padding:.75rem 1.75rem;border-radius:4px;font-weight:700;font-size:.85rem;text-decoration:none;transition:opacity .2s,transform .2s;}
+.btn-primary:hover{opacity:.88;transform:translateY(-2px);}
+.btn-ghost{display:inline-flex;align-items:center;gap:.45rem;background:transparent;color:var(--text);padding:.75rem 1.75rem;border:1px solid var(--border);border-radius:4px;font-weight:500;font-size:.85rem;text-decoration:none;transition:border-color .2s,color .2s,transform .2s;}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+
+.hero-contacts{display:flex;flex-direction:column;gap:.55rem;animation:fadeUp .6s .5s ease both;}
+.contact-row{display:inline-flex;align-items:center;gap:.6rem;color:var(--muted);font-size:.8rem;text-decoration:none;transition:color .2s;width:fit-content;}
+.contact-row:hover{color:var(--accent);}
+.contact-row svg{width:14px;height:14px;flex-shrink:0;opacity:.7;}
+
+/* Hero right — stat cards */
+.hero-right{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:1rem;animation:fadeUp .6s .5s ease both;}
+.stat-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem 1.4rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;}
+.stat-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.stat-box:hover{border-color:var(--accent);transform:translateY(-4px);}
+.stat-box-icon{font-size:1.4rem;margin-bottom:.6rem;}
+.stat-box-num{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:var(--accent);line-height:1;letter-spacing:-.03em;}
+.stat-box-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.3rem;}
+.stat-box.wide{grid-column:span 2;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── SECTION BASE ────────────────────────────── */
+section{padding:6rem 4rem;border-top:1px solid var(--border);}
+.s-label{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:.5rem;}
+.s-title{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2rem,3.5vw,3.2rem);letter-spacing:-.03em;line-height:1.05;margin-bottom:.5rem;}
+.s-title em{font-style:italic;font-weight:300;color:var(--accent);}
+.s-rule{width:40px;height:2px;background:var(--accent);margin:1rem 0 3rem;}
+
+/* ── ABOUT ───────────────────────────────────── */
+#about{background:var(--ink2);}
+.about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:4rem;align-items:start;}
+.about-text p{color:var(--muted);font-size:.92rem;line-height:1.9;margin-bottom:1.1rem;}
+.about-text p strong{color:var(--text);}
+.about-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem;}
+.chip{font-size:.72rem;font-weight:600;padding:.32rem .8rem;border-radius:2px;background:rgba(240,192,64,.08);border:1px solid rgba(240,192,64,.2);color:var(--accent);letter-spacing:.04em;}
+.about-quick{display:flex;flex-direction:column;gap:.75rem;}
+.quick-row{display:flex;align-items:center;gap:.75rem;font-size:.82rem;}
+.quick-icon{font-size:1rem;width:2rem;text-align:center;}
+.quick-val{color:var(--text);font-weight:500;}
+.quick-key{color:var(--muted);font-size:.72rem;margin-top:.1rem;}
+
+/* ── SKILLS ─────────────────────────────────── */
+#skills{background:var(--ink);}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;}
+.skill-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.75rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;}
+.skill-card::after{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--accent),var(--accent2));transform:scaleY(0);transform-origin:top;transition:transform .35s;}
+.skill-card:hover{border-color:rgba(240,192,64,.35);transform:translateX(4px);}
+.skill-card:hover::after{transform:scaleY(1);}
+.sc-icon{font-size:1.5rem;margin-bottom:.75rem;}
+.sc-title{font-family:'Fraunces',serif;font-weight:700;font-size:1rem;color:var(--text);margin-bottom:1rem;letter-spacing:-.01em;}
+.sc-pills{display:flex;flex-wrap:wrap;gap:.4rem;}
+.sc-pill{font-size:.7rem;font-weight:500;padding:.28rem .7rem;border-radius:2px;background:var(--faint);border:1px solid var(--border);color:var(--muted);transition:all .2s;cursor:default;}
+.sc-pill:hover{background:rgba(240,192,64,.1);border-color:rgba(240,192,64,.3);color:var(--accent);}
+
+/* ── PROJECTS ────────────────────────────────── */
+#projects{background:var(--ink2);}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem;}
+.proj-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color .3s,transform .3s;}
+.proj-card:hover{border-color:rgba(240,192,64,.4);transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.4);}
+.proj-thumb{height:160px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--faint);position:relative;overflow:hidden;}
+.proj-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,var(--surface));}
+.proj-body{padding:1.4rem 1.5rem 1.7rem;}
+.proj-type{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:.4rem;}
+.proj-title{font-family:'Fraunces',serif;font-weight:700;font-size:1.1rem;color:var(--text);margin-bottom:.65rem;line-height:1.2;}
+.proj-desc{color:var(--muted);font-size:.79rem;line-height:1.78;margin-bottom:1rem;}
+.proj-tags{display:flex;flex-wrap:wrap;gap:.35rem;}
+.ptag{font-size:.65rem;font-weight:600;padding:.25rem .6rem;border-radius:2px;background:rgba(224,92,58,.1);border:1px solid rgba(224,92,58,.2);color:var(--accent2);}
+
+/* ── EXPERIENCE ──────────────────────────────── */
+#experience{background:var(--ink);}
+.timeline{position:relative;max-width:820px;}
+.tl-line{position:absolute;left:18px;top:8px;bottom:0;width:1px;background:linear-gradient(180deg,var(--accent),var(--accent2),transparent);}
+.tl-item{padding-left:3.2rem;padding-bottom:3rem;position:relative;}
+.tl-dot{position:absolute;left:10px;top:6px;width:18px;height:18px;border-radius:50%;background:var(--ink);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;}
+.tl-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);}
+.tl-badge{font-size:.68rem;font-weight:600;background:rgba(240,192,64,.08);color:var(--accent);border:1px solid rgba(240,192,64,.22);padding:.28rem .75rem;border-radius:2px;white-space:nowrap;letter-spacing:.04em;}
+.tl-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.4rem;}
+.tl-role{font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;color:var(--text);}
+.tl-company{font-size:.72rem;color:var(--accent2);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.9rem;}
+.tl-list{list-style:none;display:flex;flex-direction:column;gap:.35rem;}
+.tl-list li{color:var(--muted);font-size:.82rem;line-height:1.75;padding-left:1.2rem;position:relative;}
+.tl-list li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:.75rem;}
+
+/* ── EDUCATION ───────────────────────────────── */
+#education{background:var(--ink2);}
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;}
+.edu-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:2rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;}
+.edu-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.edu-card:hover{border-color:rgba(240,192,64,.35);transform:translateY(-4px);}
+.edu-level{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:.55rem;}
+.edu-degree{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;color:var(--text);margin-bottom:.35rem;line-height:1.25;}
+.edu-school{font-size:.78rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.5;}
+.edu-score{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:var(--accent);letter-spacing:-.04em;line-height:1;}
+.edu-score-label{font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem;}
+
+/* ── CONTACT ─────────────────────────────────── */
+#contact{background:var(--ink);text-align:center;}
+.contact-inner{max-width:600px;margin:0 auto;position:relative;z-index:1;}
+.contact-glow-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(240,192,64,.06),transparent 65%);pointer-events:none;}
+.contact-desc{color:var(--muted);font-size:.9rem;line-height:1.8;margin:.5rem 0 2.2rem;}
+.contact-email{display:inline-block;font-family:'Fraunces',serif;font-size:clamp(1.1rem,2.2vw,1.6rem);font-weight:700;color:var(--accent);text-decoration:none;letter-spacing:-.01em;border-bottom:2px solid rgba(240,192,64,.25);padding-bottom:.15rem;transition:border-color .2s;margin-bottom:.6rem;}
+.contact-email:hover{border-color:var(--accent);}
+.contact-phone{color:var(--muted);font-size:.82rem;margin-bottom:2.4rem;}
+.contact-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+.cb{display:inline-flex;align-items:center;gap:.55rem;padding:.75rem 1.6rem;border-radius:4px;font-weight:600;font-size:.84rem;text-decoration:none;transition:transform .2s,box-shadow .2s;}
+.cb-li{background:rgba(10,102,194,.15);border:1px solid rgba(10,102,194,.3);color:#60a5fa;}
+.cb-li:hover{background:rgba(10,102,194,.28);transform:translateY(-3px);box-shadow:0 8px 24px rgba(10,102,194,.25);}
+.cb-gh{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);color:var(--text);}
+.cb-gh:hover{background:rgba(255,255,255,.12);transform:translateY(-3px);}
+.cb svg{width:17px;height:17px;flex-shrink:0;}
+.contact-cta-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--accent);color:var(--ink);padding:.85rem 2.2rem;border-radius:4px;font-weight:700;font-size:.88rem;text-decoration:none;transition:opacity .2s,transform .2s;}
+.contact-cta-btn:hover{opacity:.88;transform:translateY(-2px);}
+
+/* ── FOOTER ─────────────────────────────────── */
+footer{background:var(--ink2);text-align:center;padding:1.6rem;color:var(--muted);font-size:.7rem;letter-spacing:.1em;border-top:1px solid var(--border);}
+
+/* ── REVEAL ─────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.on{opacity:1;transform:none;}
+
+/* ── RESPONSIVE ─────────────────────────────── */
+@media(max-width:900px){
+  nav{padding:.9rem 1.5rem;}
+  .nav-links{display:none;}
+  #hero{grid-template-columns:1fr;padding:7rem 1.5rem 3.5rem;gap:3rem;}
+  .about-grid{grid-template-columns:1fr;}
+  section{padding:4rem 1.5rem;}
+}
+@media(max-width:500px){
+  .hero-right{grid-template-columns:1fr 1fr;}
+  .stat-box.wide{grid-column:span 2;}
+}
+</style>
+</head>
+<body class="desktop">
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">DM</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="https://mail.google.com/mail/?view=cm&fs=1&to=dhanushdhanush1100@gmail.com" target="_blank" rel="noopener" class="nav-hire">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="hero-bg-glow2"></div>
+
+  <div class="hero-left">
+    <div class="hero-badge"><span class="badge-dot"></span> Open to Opportunities</div>
+    <h1 class="hero-name">Dha<em>nush</em><br>M.</h1>
+    <p class="hero-role"><span>Data Analyst</span> · SQL · Python · Power BI · Excel</p>
+    <p class="hero-desc">Skilled in data cleaning, exploratory data analysis, dashboard development, and KPI reporting — turning raw data into decisions that move businesses forward.</p>
+    <div class="hero-actions">
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=dhanushdhanush1100@gmail.com" target="_blank" rel="noopener" class="btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="15" height="15"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Get In Touch
+      </a>
+      <a href="https://www.linkedin.com/in/dhanush-m-84b02a2a0" target="_blank" rel="noopener" class="btn-ghost">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn ↗
+      </a>
+    </div>
+    <div class="hero-contacts">
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=dhanushdhanush1100@gmail.com" target="_blank" rel="noopener" class="contact-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        dhanushdhanush1100&#64;gmail.com
+      </a>
+      <a href="tel:+917558157764" class="contact-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.66-.66a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+        +91 75581 57764
+      </a>
+      <a href="https://github.com/dhanush059" target="_blank" rel="noopener" class="contact-row">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        github.com/dhanush059
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="stat-box">
+      <div class="stat-box-icon">📊</div>
+      <div class="stat-box-num" data-count="50" data-suffix="+">0</div>
+      <div class="stat-box-label">Dashboards Built</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-icon">🗄️</div>
+      <div class="stat-box-num" data-count="4" data-suffix="+">0</div>
+      <div class="stat-box-label">Projects Done</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-icon">🛠️</div>
+      <div class="stat-box-num" data-count="8" data-suffix="+">0</div>
+      <div class="stat-box-label">Tools & Tech</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-icon">🎓</div>
+      <div class="stat-box-num" data-count="7.1" data-suffix=" CGPA">0</div>
+      <div class="stat-box-label">B.E. CSE Degree</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="s-label reveal">// about me</div>
+  <h2 class="s-title reveal">Who <em>I Am</em></h2>
+  <div class="s-rule reveal"></div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm <strong>Dhanush M</strong>, a Data Analyst based in Tamil Nadu, India. I hold a B.E. in Computer Science &amp; Engineering from NPR College of Engineering and Technology with a CGPA of 7.1.</p>
+      <p>My core strength lies in transforming messy, unstructured data into <strong>clean, actionable insights</strong>. Whether it's writing optimized SQL queries, building automated Python pipelines, or crafting 50+ interactive Power BI dashboards — I bring precision and clarity to every dataset I touch.</p>
+      <p>I've completed internships in <strong>Python Data Analysis</strong> (Jul–Aug 2024) and <strong>Java Development</strong> (May–Jun 2023), and I'm actively seeking a full-time Data Analyst role where I can contribute to meaningful, data-driven decisions.</p>
+      <div class="about-chips">
+        <span class="chip">SQL</span>
+        <span class="chip">Python</span>
+        <span class="chip">Power BI</span>
+        <span class="chip">Excel</span>
+        <span class="chip">Pandas</span>
+        <span class="chip">Figma</span>
+        <span class="chip">EDA</span>
+        <span class="chip">KPI Analysis</span>
+      </div>
+    </div>
+    <div class="about-quick reveal">
+      <div class="quick-row">
+        <span class="quick-icon">📍</span>
+        <div><div class="quick-val">Tamil Nadu, India</div><div class="quick-key">Location</div></div>
+      </div>
+      <div class="quick-row">
+        <span class="quick-icon">🎓</span>
+        <div><div class="quick-val">B.E. Computer Science</div><div class="quick-key">NPR College of Engineering</div></div>
+      </div>
+      <div class="quick-row">
+        <span class="quick-icon">💼</span>
+        <div><div class="quick-val">Open to Work</div><div class="quick-key">Data Analyst Roles</div></div>
+      </div>
+      <div class="quick-row">
+        <span class="quick-icon">📧</span>
+        <div><div class="quick-val">dhanushdhanush1100&#64;gmail.com</div><div class="quick-key">Email</div></div>
+      </div>
+      <div class="quick-row">
+        <span class="quick-icon">📞</span>
+        <div><div class="quick-val">+91 75581 57764</div><div class="quick-key">Phone</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SKILLS ── -->
+<section id="skills">
+  <div class="s-label reveal">// expertise</div>
+  <h2 class="s-title reveal">Skills &amp; <em>Technologies</em></h2>
+  <div class="s-rule reveal"></div>
+  <div class="skills-grid">
+
+    <div class="skill-card reveal">
+      <div class="sc-icon">📈</div>
+      <div class="sc-title">Data Analysis &amp; Visualization</div>
+      <div class="sc-pills">
+        <span class="sc-pill">Excel</span>
+        <span class="sc-pill">Pivot Tables</span>
+        <span class="sc-pill">VLOOKUP</span>
+        <span class="sc-pill">Data Cleaning</span>
+        <span class="sc-pill">KPI Analysis</span>
+        <span class="sc-pill">EDA</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="sc-icon">📊</div>
+      <div class="sc-title">Business Intelligence</div>
+      <div class="sc-pills">
+        <span class="sc-pill">Power BI</span>
+        <span class="sc-pill">Interactive Dashboards</span>
+        <span class="sc-pill">DAX Basics</span>
+        <span class="sc-pill">KPI Tracking</span>
+        <span class="sc-pill">Reporting</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="sc-icon">🗄️</div>
+      <div class="sc-title">SQL &amp; Querying</div>
+      <div class="sc-pills">
+        <span class="sc-pill">SQL</span>
+        <span class="sc-pill">JOINs</span>
+        <span class="sc-pill">Subqueries</span>
+        <span class="sc-pill">CTEs</span>
+        <span class="sc-pill">Window Functions</span>
+        <span class="sc-pill">Query Optimization</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="sc-icon">🐍</div>
+      <div class="sc-title">Python Programming</div>
+      <div class="sc-pills">
+        <span class="sc-pill">Python</span>
+        <span class="sc-pill">Pandas</span>
+        <span class="sc-pill">NumPy</span>
+        <span class="sc-pill">Matplotlib</span>
+        <span class="sc-pill">Seaborn</span>
+        <span class="sc-pill">Automation</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="sc-icon">☕</div>
+      <div class="sc-title">Other Programming</div>
+      <div class="sc-pills">
+        <span class="sc-pill">Java</span>
+        <span class="sc-pill">OOP Concepts</span>
+        <span class="sc-pill">Debugging</span>
+        <span class="sc-pill">Testing</span>
+        <span class="sc-pill">Code Optimization</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="sc-icon">🎨</div>
+      <div class="sc-title">Design &amp; Prototyping</div>
+      <div class="sc-pills">
+        <span class="sc-pill">Figma</span>
+        <span class="sc-pill">UI/UX Design</span>
+        <span class="sc-pill">Prototyping</span>
+        <span class="sc-pill">Mobile Design</span>
+        <span class="sc-pill">Layouts</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── PROJECTS ── -->
+<section id="projects">
+  <div class="s-label reveal">// work</div>
+  <h2 class="s-title reveal">Featured <em>Projects</em></h2>
+  <div class="s-rule reveal"></div>
+  <div class="projects-grid">
+
+    <div class="proj-card reveal">
+      <div class="proj-thumb">📊</div>
+      <div class="proj-body">
+        <div class="proj-type">Power BI · Excel · Dashboard</div>
+        <div class="proj-title">50+ Interactive Business Dashboards</div>
+        <div class="proj-desc">Built over 50 interactive dashboards in Power BI and Excel tracking KPIs including revenue, profit, sales growth, and performance trends. Significantly improved data visibility and reporting efficiency across teams.</div>
+        <div class="proj-tags">
+          <span class="ptag">Power BI</span><span class="ptag">Excel</span><span class="ptag">DAX</span><span class="ptag">KPI</span><span class="ptag">Reporting</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal">
+      <div class="proj-thumb">🗄️</div>
+      <div class="proj-body">
+        <div class="proj-type">SQL · Data Analysis</div>
+        <div class="proj-title">SQL Data Analysis &amp; Query Optimization</div>
+        <div class="proj-desc">Extracted, cleaned and structured complex datasets using SQL. Wrote advanced queries with JOINs, GROUP BY, CTEs, and window functions to uncover KPIs and trends. Optimized queries for speed and accuracy.</div>
+        <div class="proj-tags">
+          <span class="ptag">SQL</span><span class="ptag">CTEs</span><span class="ptag">Window Functions</span><span class="ptag">Query Optimization</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal">
+      <div class="proj-thumb">🐍</div>
+      <div class="proj-body">
+        <div class="proj-type">Python · EDA · Automation</div>
+        <div class="proj-title">Python Data Analysis &amp; EDA Pipeline</div>
+        <div class="proj-desc">End-to-end data cleaning and exploratory analysis with Pandas and NumPy. Visualized findings using Matplotlib and Seaborn. Automated reporting workflows to reduce manual processing time significantly.</div>
+        <div class="proj-tags">
+          <span class="ptag">Python</span><span class="ptag">Pandas</span><span class="ptag">NumPy</span><span class="ptag">Matplotlib</span><span class="ptag">Seaborn</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal">
+      <div class="proj-thumb">📱</div>
+      <div class="proj-body">
+        <div class="proj-type">Figma · UI/UX Design</div>
+        <div class="proj-title">Clothing App UI Prototype</div>
+        <div class="proj-desc">Designed a full mobile clothing app prototype in Figma with interactive layouts and promotional UI components. Focused on clean, intuitive UX for browsing and product discovery.</div>
+        <div class="proj-tags">
+          <span class="ptag">Figma</span><span class="ptag">UI Design</span><span class="ptag">Prototyping</span><span class="ptag">Mobile UX</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── EXPERIENCE ── -->
+<section id="experience">
+  <div class="s-label reveal">// journey</div>
+  <h2 class="s-title reveal">Work <em>Experience</em></h2>
+  <div class="s-rule reveal"></div>
+  <div class="timeline">
+    <div class="tl-line"></div>
+
+    <div class="tl-item reveal">
+      <div class="tl-dot"></div>
+      <div class="tl-header">
+        <div>
+          <div class="tl-role">Python Data Analyst Intern</div>
+          <div class="tl-company">Python Internship</div>
+        </div>
+        <span class="tl-badge">Jul 2024 — Aug 2024</span>
+      </div>
+      <ul class="tl-list">
+        <li>Analyzed structured datasets using Python and Pandas to identify trends and patterns</li>
+        <li>Automated data cleaning processes to reduce manual effort and improve data accuracy</li>
+        <li>Built exploratory data analysis (EDA) reports to support data-driven business decisions</li>
+      </ul>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-dot"></div>
+      <div class="tl-header">
+        <div>
+          <div class="tl-role">Java Developer Intern</div>
+          <div class="tl-company">Java Internship</div>
+        </div>
+        <span class="tl-badge">May 2023 — Jun 2023</span>
+      </div>
+      <ul class="tl-list">
+        <li>Worked on object-oriented programming concepts and application logic in Java</li>
+        <li>Improved debugging, testing, and optimization skills on real-world code</li>
+        <li>Gained hands-on exposure to structured programming practices and code reliability</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── EDUCATION ── -->
+<section id="education">
+  <div class="s-label reveal">// academics</div>
+  <h2 class="s-title reveal">Academic <em>Background</em></h2>
+  <div class="s-rule reveal"></div>
+  <div class="edu-grid">
+
+    <div class="edu-card reveal">
+      <div class="edu-level">Undergraduate Degree</div>
+      <div class="edu-degree">B.E. Computer Science &amp; Engineering</div>
+      <div class="edu-school">NPR College of Engineering and Technology</div>
+      <div class="edu-score">7.1</div>
+      <div class="edu-score-label">CGPA</div>
+    </div>
+
+    <div class="edu-card reveal">
+      <div class="edu-level">Class XII · Higher Secondary</div>
+      <div class="edu-degree">Higher Secondary Education</div>
+      <div class="edu-school">State Board, Tamil Nadu</div>
+      <div class="edu-score">80%</div>
+      <div class="edu-score-label">Percentage</div>
+    </div>
+
+    <div class="edu-card reveal">
+      <div class="edu-level">Class X · Secondary School</div>
+      <div class="edu-degree">Secondary School Education</div>
+      <div class="edu-school">State Board, Tamil Nadu</div>
+      <div class="edu-score">77%</div>
+      <div class="edu-score-label">Percentage</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="contact-glow-bg"></div>
+  <div class="contact-inner">
+    <div class="s-label reveal">// contact</div>
+    <h2 class="s-title reveal">Let's <em>Work Together</em></h2>
+    <div class="s-rule reveal" style="margin-left:auto;margin-right:auto;"></div>
+    <p class="contact-desc reveal">I'm actively seeking Data Analyst opportunities. Whether you have a role, a project, or just want to talk data — I'd love to hear from you.</p>
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=dhanushdhanush1100@gmail.com" target="_blank" rel="noopener" class="contact-email reveal">dhanushdhanush1100&#64;gmail.com</a><br>
+    <p class="contact-phone reveal">📞 +91 75581 57764</p>
+    <div class="contact-btns reveal">
+      <a href="https://www.linkedin.com/in/dhanush-m-84b02a2a0" target="_blank" rel="noopener" class="cb cb-li">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        Connect on LinkedIn
+      </a>
+      <a href="https://github.com/dhanush059" target="_blank" rel="noopener" class="cb cb-gh">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        View GitHub
+      </a>
+    </div>
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=dhanushdhanush1100@gmail.com" target="_blank" rel="noopener" class="contact-cta-btn reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Send Me an Email ↗
+    </a>
+  </div>
+</section>
+
+<footer>© 2026 Dhanush M — Data Analyst &nbsp;·&nbsp; dhanushdhanush1100&#64;gmail.com &nbsp;·&nbsp; Tamil Nadu, India</footer>
+
+<script>
+/* Custom cursor */
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+if(window.matchMedia('(pointer:fine)').matches){
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function tick(){cur.style.left=mx+'px';cur.style.top=my+'px';rx+=(mx-rx)*.13;ry+=(my-ry)*.13;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick);})();
+  document.querySelectorAll('a,button,.stat-box,.skill-card,.proj-card,.edu-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';ring.style.transform='translate(-50%,-50%) scale(1.5)';ring.style.opacity='.18';});
+    el.addEventListener('mouseleave',()=>{cur.style.width='8px';cur.style.height='8px';ring.style.transform='translate(-50%,-50%) scale(1)';ring.style.opacity='.35';});
+  });
+}else{
+  document.body.classList.remove('desktop');
+}
+
+/* Scroll reveal */
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('on'),i*65);});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* Nav shadow */
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>50));
+
+/* Stat counters */
+const co=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting||e.target._done)return;
+    e.target._done=true;
+    const target=parseFloat(e.target.dataset.count);
+    const suffix=e.target.dataset.suffix||'';
+    const isFloat=!Number.isInteger(target);
+    let start=0,dur=1600,step=target/dur*16;
+    const t=setInterval(()=>{
+      start+=step;
+      if(start>=target){start=target;clearInterval(t);}
+      e.target.textContent=(isFloat?start.toFixed(1):Math.floor(start))+suffix;
+    },16);
+  });
+},{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+</script>
+</body>
+</html>
